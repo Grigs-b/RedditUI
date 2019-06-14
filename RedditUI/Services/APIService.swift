@@ -8,8 +8,6 @@
 
 import Foundation
 import Combine
-import UIKit
-import SwiftUI
 
 class APIService {
     var host: String = "api.reddit.com"
@@ -32,19 +30,20 @@ class APIService {
         let future = network.request(request).map({ (result: Container<Listing<Post>>) -> [Post] in
             return result.data.children.map({ $0.data })
         })
-        return future.eraseToAnyPublisher()
+
+        return future
+            //.receiveOn(on: RunLoop.main)
+            .eraseToAnyPublisher()
     }
     
-    func image(from url: URL) -> AnyPublisher<Image, Error> {
+    func image(from url: URL) -> AnyPublisher<Data, Error> {
         return Publishers.Future({ fulfill in
-            guard let data = try? Data(contentsOf: url),
-                let uiImage = UIImage(data: data) else {
+            guard let data = try? Data(contentsOf: url) else {
                 fulfill(.failure(NetworkError.invalidURL))
                 return
             }
             
-            let image = Image(uiImage: uiImage)
-            fulfill(.success(image))
+            fulfill(.success(data))
         }).eraseToAnyPublisher()
     }
 }

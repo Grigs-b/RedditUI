@@ -19,6 +19,8 @@
 		B65D5C4422AEED240036B0D4 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65D5C4322AEED240036B0D4 /* APIService.swift */; };
 		B65D5C4622AEFEFA0036B0D4 /* SubredditQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65D5C4522AEFEFA0036B0D4 /* SubredditQuery.swift */; };
 		B65D5C4822AFFB070036B0D4 /* NetworkAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65D5C4722AFFB070036B0D4 /* NetworkAdapter.swift */; };
+		CD692D6322B2E33300D40DA5 /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD692D6222B2E33300D40DA5 /* ImageStore.swift */; };
+		CD70DDDC22B04388005D393A /* PostListStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD70DDDB22B04388005D393A /* PostListStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		B65D5C4322AEED240036B0D4 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		B65D5C4522AEFEFA0036B0D4 /* SubredditQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubredditQuery.swift; sourceTree = "<group>"; };
 		B65D5C4722AFFB070036B0D4 /* NetworkAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkAdapter.swift; sourceTree = "<group>"; };
+		CD692D6222B2E33300D40DA5 /* ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
+		CD70DDDB22B04388005D393A /* PostListStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostListStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +72,7 @@
 		B65D5C2522AEE3430036B0D4 /* RedditUI */ = {
 			isa = PBXGroup;
 			children = (
-				B65D5C4922AFFDE80036B0D4 /* ViewModels */,
+				B65D5C4922AFFDE80036B0D4 /* Stores */,
 				B65D5C3B22AEE3900036B0D4 /* Services */,
 				B65D5C3A22AEE38D0036B0D4 /* Models */,
 				B65D5C2622AEE3430036B0D4 /* AppDelegate.swift */,
@@ -110,11 +114,13 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		B65D5C4922AFFDE80036B0D4 /* ViewModels */ = {
+		B65D5C4922AFFDE80036B0D4 /* Stores */ = {
 			isa = PBXGroup;
 			children = (
+				CD70DDDB22B04388005D393A /* PostListStore.swift */,
+				CD692D6222B2E33300D40DA5 /* ImageStore.swift */,
 			);
-			path = ViewModels;
+			path = Stores;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -188,6 +194,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD692D6322B2E33300D40DA5 /* ImageStore.swift in Sources */,
 				B65D5C2722AEE3430036B0D4 /* AppDelegate.swift in Sources */,
 				B65D5C4422AEED240036B0D4 /* APIService.swift in Sources */,
 				B65D5C4222AEEC330036B0D4 /* Container.swift in Sources */,
@@ -197,6 +204,7 @@
 				B65D5C4822AFFB070036B0D4 /* NetworkAdapter.swift in Sources */,
 				B65D5C2B22AEE3430036B0D4 /* ContentView.swift in Sources */,
 				B65D5C3F22AEE4770036B0D4 /* Post.swift in Sources */,
+				CD70DDDC22B04388005D393A /* PostListStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

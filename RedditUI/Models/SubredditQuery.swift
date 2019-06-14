@@ -37,7 +37,7 @@ struct SubredditQuery: URLQueryItemQueryable {
     var page: Pagination?
     
     init() {
-        name = ""
+        name = "all"
         count = 0
     }
     

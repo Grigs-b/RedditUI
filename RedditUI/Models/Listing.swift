@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct Listing<T: ModelType>: ModelType {
-    var id: UUID = UUID()
+//    var id: UUID = UUID()
     var dist: Int
     var children: [Container<T>]
     var after: String?

@@ -25,7 +25,7 @@ struct Container<T: ModelType>: ModelType   {
         case promoCampaign = "t8"
     }
     
-    var id: UUID = UUID()
+//    var id: UUID = UUID()
     var kind: Kind
     var data: T
 }

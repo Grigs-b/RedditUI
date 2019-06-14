@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct Post: ModelType {
-    var id: String
+//    var id: String
     var title: String
     var thumbnail: URL
     var url: URL
