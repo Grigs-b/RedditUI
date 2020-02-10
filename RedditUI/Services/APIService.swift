@@ -7,9 +7,10 @@
 //
 
 import Foundation
+import UIKit
 import Combine
 
-class APIService {
+class APIService: ObservableObject {
     var host: String = "api.reddit.com"
     var network: NetworkAdapter
     
@@ -24,7 +25,7 @@ class APIService {
         components.path = query.path
         components.queryItems = query.queryItems
         guard let url = components.url else {
-            return Publishers.Fail(error: NetworkError.invalidURL as Error).eraseToAnyPublisher()
+            return Fail(error: NetworkError.invalidURL as Error).eraseToAnyPublisher()
         }
         let request = URLRequest(url: url)
         let future = network.request(request).map({ (result: Container<Listing<Post>>) -> [Post] in
@@ -32,18 +33,12 @@ class APIService {
         })
 
         return future
-            //.receiveOn(on: RunLoop.main)
+            .receive(on: RunLoop.main)
             .eraseToAnyPublisher()
     }
     
-    func image(from url: URL) -> AnyPublisher<Data, Error> {
-        return Publishers.Future({ fulfill in
-            guard let data = try? Data(contentsOf: url) else {
-                fulfill(.failure(NetworkError.invalidURL))
-                return
-            }
-            
-            fulfill(.success(data))
-        }).eraseToAnyPublisher()
+    func image(from url: URL) -> AnyPublisher<Data?, Error> {
+        let request = URLRequest(url: url)
+        return network.request(request).eraseToAnyPublisher()
     }
 }

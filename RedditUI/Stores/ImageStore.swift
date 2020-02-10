@@ -10,24 +10,28 @@ import UIKit
 import SwiftUI
 import Combine
 
-final class ImageStore: BindableObject {
-    let didChange = PassthroughSubject<UIImage, Never>()
+final class ImageStore: ObservableObject {
     let api: APIService
-    var image: UIImage = UIImage() {
-        didSet {
-            didChange.send(image)
-        }
-    }
+    @Published var image: UIImage = UIImage()
     
     init(api: APIService = APIService(), url: URL) {
         self.api = api
+        print("imagestore init")
         image(for: url)
     }
     
     func image(for url: URL) {
-        _ = api.image(from: url).sink(receiveValue: { data in
-            guard let image = UIImage(data: data) else { return }
-            self.image = image
-        })
+        _ = api.image(from: url)
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { (error) in
+                print(error)
+            }, receiveValue: { data in
+                guard let data = data,
+                    let image = UIImage(data: data) else {
+                        return
+                }
+                print("got image")
+                self.image = image
+            })
     }
 }

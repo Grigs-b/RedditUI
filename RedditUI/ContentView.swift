@@ -12,35 +12,34 @@ import Combine
 
 struct PostCellView: View {
     var post: Post
-    var imageStore: ImageStore
-//    @EnvironmentObject var api: APIService
+    @EnvironmentObject var imageStore: ImageStore
     
     init(post: Post) {
+        print("Made post cell view")
         self.post = post
-        // todo: @EnvironmentObject api service?
-        imageStore = ImageStore(api: APIService(), url: post.thumbnail)
     }
     
     var body: some View {
-        VStack {
+        HStack {
             Image(uiImage: imageStore.image)
                 .resizable()
-                .frame(width: 200, height: 200)
+                .frame(width: 75, height: 75)
                 .clipped()
-                
+            
             Text(post.title)
         }
     }
 }
 
 struct ContentView : View {
-    @State var store: PostListStore = PostListStore()
+    @EnvironmentObject var store: PostListStore
     
     var body: some View {
+        
         NavigationView {
             List {
-                ForEach(store.posts.identified(by: \.title)) { post in
-                    PostCellView(post: post)
+                ForEach(store.posts, id: \.title) { post in
+                    PostCellView(post: post).environmentObject(ImageStore(url: post.thumbnail))
                 }
             }.navigationBarTitle(Text("Reddit"))
         }
@@ -55,7 +54,7 @@ struct ContentView_Previews : PreviewProvider {
     static var previews: some View {
         
         let store = PostListStore()
-        return ContentView(store: store)
+        return ContentView().environmentObject(store)
     }
 }
 #endif

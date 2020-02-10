@@ -10,38 +10,42 @@ import Foundation
 import SwiftUI
 import Combine
 
-final class PostListStore: BindableObject  {
-    let didChange = PassthroughSubject<PostListStore, Never>()
+final class PostListStore: ObservableObject {
+    @Published var posts: [Post] = []
     let api: APIService
     
     init(api: APIService = APIService()) {
         self.api = api
     }
     
-    var posts: [Post] = [] {
-        didSet {
-            didChange.send(self)
-        }
-    }
-    
     func search(text: String) {
         let query = SubredditQuery(text)
-        api.subreddit(query).sink(receiveValue: { posts in
-            // shouldn't have to dispatch here but apis dont appear to be available yet 6/13
-            DispatchQueue.main.async {
-                self.posts = posts
-            }
+        _ = api.subreddit(query)
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { (error) in
+                // something?
+                print(error)
+        }, receiveValue: { (posts) in
+            self.posts = posts
         })
-        
     }
     
+    var query: AnyCancellable?
+    
     func load() {
-        api.subreddit(SubredditQuery()).sink { (posts) in
-            // shouldn't have to dispatch here but apis dont appear to be available yet 6/13
-            DispatchQueue.main.async {
-                print("Settings posts count: \(posts.count)")
+        let query = api.subreddit(SubredditQuery())
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { (result) in
+                // something?
+                switch result {
+                case .finished:
+                    print("successful fetch")
+                case .failure(let error):
+                    print("Error fetching subreddits: \(error)")
+                }
+            }, receiveValue: { (posts) in
                 self.posts = posts
-            }
-        }
+            })
+        self.query = query
     }
 }

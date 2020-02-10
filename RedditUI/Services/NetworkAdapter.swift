@@ -24,33 +24,9 @@ class NetworkAdapter: NSObject, URLSessionDelegate {
         return URLSession(configuration: config, delegate: self, delegateQueue: nil)
     }()
     
-    func request<T: Decodable>(_ request: URLRequest) -> Publishers.Future<T, Error> {
-        /*
-         soon:
-         return session.dataTaskPublisher(with: request)
-         .decode(T.self, JSONDecoder())
-         */
-        let publisher = Publishers.Future<T, Error>({ fulfill in
-            
-            self.session.dataTask(with: request, completionHandler: { (data, response, error) in
-                guard error == nil else {
-                    fulfill(.failure(error!))
-                    return
-                }
-                guard let data = data else {
-                    fulfill(.failure(NetworkError.noData))
-                    return
-                }
-                
-                do {
-                    let result = try JSONDecoder().decode(T.self, from: data)
-                    fulfill(.success(result))
-                } catch {
-                    fulfill(.failure(error))
-                }
-            }).resume()
-        })
-        
-        return publisher
+    func request<T: Decodable>(_ request: URLRequest) -> AnyPublisher<T, Error> {
+        let publisher = self.session.dataTaskPublisher(for: request)
+        return publisher.map(\.data)
+            .decode(type: T.self, decoder: JSONDecoder()).eraseToAnyPublisher()
     }
 }
