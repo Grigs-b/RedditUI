@@ -37,8 +37,10 @@ class APIService: ObservableObject {
             .eraseToAnyPublisher()
     }
     
-    func image(from url: URL) -> AnyPublisher<Data?, Error> {
-        let request = URLRequest(url: url)
-        return network.request(request).eraseToAnyPublisher()
+    func image(from url: URL) -> AnyPublisher<Data?, URLSession.DataTaskPublisher.Failure> {
+        return network.session.dataTaskPublisher(for: url)
+            .map { (data, response) -> Data in
+            return data
+        }.eraseToAnyPublisher()
     }
 }

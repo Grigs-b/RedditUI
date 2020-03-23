@@ -9,37 +9,14 @@
 import SwiftUI
 import Combine
 
-
-struct PostCellView: View {
-    var post: Post
-    @EnvironmentObject var imageStore: ImageStore
-    
-    init(post: Post) {
-        print("Made post cell view")
-        self.post = post
-    }
-    
-    var body: some View {
-        HStack {
-            Image(uiImage: imageStore.image)
-                .resizable()
-                .frame(width: 75, height: 75)
-                .clipped()
-            
-            Text(post.title)
-        }
-    }
-}
-
 struct ContentView : View {
     @EnvironmentObject var store: PostListStore
     
     var body: some View {
-        
         NavigationView {
             List {
                 ForEach(store.posts, id: \.title) { post in
-                    PostCellView(post: post).environmentObject(ImageStore(url: post.thumbnail))
+                    PostCellView(post: post)
                 }
             }.navigationBarTitle(Text("Reddit"))
         }

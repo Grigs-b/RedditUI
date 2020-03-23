@@ -11,17 +11,19 @@ import SwiftUI
 import Combine
 
 final class ImageStore: ObservableObject {
+    
     let api: APIService
+    let url: URL
     @Published var image: UIImage = UIImage()
+    var request: AnyCancellable?
     
     init(api: APIService = APIService(), url: URL) {
         self.api = api
-        print("imagestore init")
-        image(for: url)
+        self.url = url
     }
     
-    func image(for url: URL) {
-        _ = api.image(from: url)
+    func fetch() {
+        let request = api.image(from: url)
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { (error) in
                 print(error)
@@ -30,8 +32,8 @@ final class ImageStore: ObservableObject {
                     let image = UIImage(data: data) else {
                         return
                 }
-                print("got image")
                 self.image = image
             })
+        self.request = request
     }
 }
